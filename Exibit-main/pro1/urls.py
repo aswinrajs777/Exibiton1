@@ -25,12 +25,12 @@ urlpatterns = [
     path('postsign/',views.postsign),
     path('logout/',views.logout,name="logout"),
     path('postsignup/',views.postsignup,name='postsignup'),
-    path('welcome/',views.welcome,name='home'),
+
     path('create/',views.create,name='upload'),
     path('post_create/',views.post_create,name='csvupload'),
     path('post_createcsv/',views.post_createcsv,name='post_createcsv'),
     path('crop',views.crop,name='crop'),
-    path('actioncrop',views.actioncrop,name='actioncrop'),
+    path('crop-video/', views.crop_video, name='crop_video'),
 
 
 ]

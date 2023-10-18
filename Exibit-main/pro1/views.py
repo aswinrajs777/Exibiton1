@@ -9,6 +9,19 @@ from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 
 from django.conf.urls.static import static
 
+
+from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pro1.settings')
+
+application = get_wsgi_application()
+
+import os
+
 config = {
 
 'apiKey': "AIzaSyDfStYg1oybMuNWma1-4KGJynjrPwIfyhU",
@@ -28,7 +41,7 @@ authe = firebase.auth()
 
 def landing(request):
 
-    return render(request, "landing.html")
+    return render(request, "signIn.html")
 
 def singIn(request):
 
@@ -53,7 +66,7 @@ def postsign(request):
     a = a['localId']
     name = database.child('users').child(a).child('details').child('name').get().val()
 
-    return render(request, "welcome.html",{"e":name})
+    return render(request, "upload.html",{"name":name})
 
 def logout(request):
     auth.logout(request)
@@ -77,13 +90,16 @@ def postsignup(request):
 
 
     return render(request, "signIn.html",{"messg": "Check Your Mail!"})
-def welcome(request):
 
-    return render(request,'welcome.html')
 
 def create(request):
-
-    return render(request,'upload.html')
+    idtoken = request.session['uid']
+    a = authe.get_account_info(idtoken)
+    a = a['users']
+    a = a[0]
+    a = a['localId']
+    name = database.child('users').child(a).child('details').child('name').get().val()
+    return render(request,'upload.html',{"name":name})
 
 def post_create(request):
 
@@ -170,29 +186,30 @@ def crop(request):
     video_url = database.child('users').child(a).child('reports').child('videourls').child('url').get().val()
 
     return render(request,'crop.html', {'i': video_url,})
+def crop_video(request):
+    if request.method == 'POST':
+        try:
+            start_time_str = request.POST.get('start_time')
+            end_time_str = request.POST.get('end_time')
 
-def actioncrop(request):
-    try:
-        start_time_str = request.json['start_time']
-        end_time_str = request.json['end_time']
+            # Convert start and end times from HH:MM:SS to seconds
+            start_time = sum(x * int(t) for x, t in zip([3600, 60, 1], start_time_str.split(':')))
+            end_time = sum(x * int(t) for x, t in zip([3600, 60, 1], end_time_str.split(':')))
 
-        # Convert start and end times from HH:MM:SS to seconds
-        start_time = sum(x * int(t) for x, t in zip([3600, 60, 1], start_time_str.split(':')))
-        end_time = sum(x * int(t) for x, t in zip([3600, 60, 1], end_time_str.split(':')))
+            if start_time >= end_time:
+                return HttpResponse("Invalid time range", status=400)
 
-        if start_time >= end_time:
-            return "Invalid time range", 400
+            input_video_path = "Trial with 5MP camera (1).mp4"  # Replace with your input video path
+            output_video_path = "output_cropped_video.mp4"
 
-        input_video_path = "Trial with 5MP camera (1).mp4"  # Replace with your input video path
-        output_video_path = "output_cropped_video.mp4"
+            ffmpeg_extract_subclip(input_video_path, start_time, end_time, targetname=output_video_path)
 
-        ffmpeg_extract_subclip(input_video_path, start_time, end_time, targetname=output_video_path)
+            with open(output_video_path, 'rb') as video_file:
+                response = HttpResponse(video_file.read(), content_type='video/mp4')
+                response['Content-Disposition'] = 'attachment; filename="cropped_video.mp4"'
+                return response
 
-        return send_file(output_video_path, as_attachment=True, download_name='cropped_video.mp4')
-    except Exception as e:
-        return str(e), 500
-
-
-
-
-
+        except Exception as e:
+            return HttpResponse(str(e), status=500)
+    else:
+        return HttpResponse("Invalid request method", status=405)

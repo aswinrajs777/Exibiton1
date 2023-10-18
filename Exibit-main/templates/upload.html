@@ -15,7 +15,7 @@
         crossorigin="anonymous"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/profile.css' rel='stylesheet'>
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -61,6 +61,15 @@
         .nav-link:hover::after {
             transform: scaleX(1);
         }
+
+
+
+
+
+
+
+
+
 
         button {
             margin: 20px;
@@ -166,28 +175,33 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-        <a class="navbar-brand" href="#">EOW</a>
+        <a class="navbar-brand" href="#">Exhibit on Watch</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item ">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
-                </li>
+
                 <li class="nav-item active">
                     <a class="nav-link"  href="{% url 'upload' %}">Upload</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+
                 </li>
+                 <li class="nav-item">
+
+                    <a class="nav-item" > <i style="margin-left:10px;" class="gg-profile"></i>{{name}}</a>
+
+                </li>
+<!--                <li class="nav-item"><a class="nav-link" ><i class="gg-profile"></i>{{name}}</a></li>-->
             </ul>
         </div>
     </nav>
 
     <div class="container-fluid">
-       
+
 
           <!-- back button -->
           <button type="button" onclick="goBack()" class="circular-button back-button">
@@ -203,6 +217,7 @@
                             <form action="/post_create/" method="post">
                               {% csrf_token %}
                                 <h3 id="sdx">Video Upload</h3>
+                                <p id="sdx1">!!!Get Started by uploading your Video!!!</p>
                                <input type="file" name="files[]" id="files">
                                <input type="hidden" name="url" id="url">
                                <button type="button" id="upx" onclick="uploadimage()" class="custom-btn btn-15">Upload</button><br><br>
@@ -230,16 +245,21 @@
     databaseURL: "https://exhibiton-ce35a-default-rtdb.firebaseio.com",
     storageBucket: "exhibiton-ce35a.appspot.com",
     messagingSenderId: "241695038706"
-      
-  
+
+
     };
     firebase.initializeApp(config);
+
+     // function to navigate back
+     function goBack() {
+        window.history.back();
+    }
 
     // Get a reference to the storage service, which is used to create references in your storage bucket
 
     function uploadimage() {
       document.getElementById('upx').textContent = "Uploading!";
-      document.getElementById('updng').textContent = "Uploading, Please Wait!";
+      document.getElementById('updng').textContent = "Video Uploading, Please Wait!";
       var storage = firebase.storage();
       var file = document.getElementById("files").files[0];
       var storageRef = storage.ref();
@@ -259,8 +279,9 @@
           document.getElementById('upx').style.display = "none";
           document.getElementById('files').style.display = "none";
           document.getElementById('sdx').style.display = "none";
+          document.getElementById('sdx1').style.display = "none";
 
-          document.getElementById('updng').textContent = "Uploaded Successfully!";
+          document.getElementById('updng').textContent = "Video Uploaded Successfully!";
           document.getElementById("super").style.display = "block";
         }
       );

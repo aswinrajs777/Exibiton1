@@ -468,9 +468,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item ">
-            <a class="nav-link" href="{% url 'home' %}">Home</a>
-          </li>
+
           <li class="nav-item active">
             <a class="nav-link"  href="{% url 'upload' %}">Upload</a>
           </li>
@@ -504,8 +502,9 @@
               <div class="excel-file-input-box">
                 <form action="/post_createcsv/" method="post">
                 {% csrf_token %}
-                  <h3 id="sdx">File Upload</h3>
-                 <input type="file" name="files[]" id="files" ><br>
+
+                  <h3 id="sdx">File Upload<p style="color:red;font-size: 15px;">*Only csv and exel</p></h3>
+                 <input type="file" name="files[]" id="files" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" ><br>
                  <input type="hidden" name="url" id="url"><br>
                   <button type="button" id="upx" onclick="uploadimage()" class="custom-btn btn-15 btn-primary" >Upload</button>
                  <br><h6 id="updng"></h6>

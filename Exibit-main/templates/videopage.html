@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-widtqh, initial-scale=1.0" />
-    <title>VideoSearch</title>
+    <title>after csv</title>
 
     <link
       rel="stylesheet"
@@ -110,12 +110,12 @@
         justify-content: center;
       }
       .container {
-        width: 100%;
+        /* width: 100%; */
         user-select: none;
         overflow: hidden;
-        max-width: 900px;
-        border-radius: 21px;
-
+        max-width: 200;
+        max-height: 92vh;
+        border-radius: 10px;
         background: transparent;
         padding-inline: 0px;
         aspect-ratio: 16 / 11;
@@ -413,7 +413,7 @@
             outline: none;
         }
         .btn-15 {
-            background: #b621fe;
+            background: #dd3434;
             border: none;
             z-index: 1;
         }
@@ -422,11 +422,12 @@
             position: absolute;
             content: "";
             width: 0;
+
             height: 100%;
             top: 0;
             right: 0;
             z-index: -1;
-            background-color: #663dff;
+            background-color: #dd3434;
             border-radius: 5px;
             box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
                 7px 7px 20px 0px rgba(0, 0, 0, .1),
@@ -435,11 +436,14 @@
         }
 
         .btn-15:hover {
+
             color: #fff;
         }
 
         .btn-15:hover:after {
             left: 0;
+            border-top-right-radius: 21px;
+            border-bottom-right-radius: 21px;
             width: 100%;
         }
 
@@ -455,9 +459,8 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   width: 100%;
-
+  /* display: flex; */
   justify-content: space-between;
-  overflow-y: hidden;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -474,25 +477,18 @@
 }
 
 .scroll-left{
-  background-color: #f8f9fa80;
-
-              max-height: 900px;
+    background-color: #f8f9fa80;
+              backdrop-filter: blur(9px);
+              border-radius: 0 0 0 0;
+              max-height: 700px;
               overflow-y: auto;
               width: 700px;
-         max-height: 700px;
-            /* left: 2%;
-            margin-top: 3%; */
-            border-radius: 20px;
-              background-color: #f8f9fa80;
-              backdrop-filter: blur(9px);
-              border-radius: 0 0 21px 0;
-              -ms-overflow-style: none;
-              scrollbar-width: none;
 }
 
 .scroll-left::-webkit-scrollbar {
   display: none;
 }
+
     </style>
   </head>
   <body>
@@ -512,19 +508,19 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'home' %}">Home</a>
+            <a class="nav-link" href="index.html">Home</a>
           </li>
           <li class="nav-item dropdown"> <!-- Add dropdown class to this li element -->
             <a class="nav-link " href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Upload <!-- Dropdown toggle button -->
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="nav-link dropdown-item" href="{% url 'csvupload' %}">Upload CSV</a> <!-- Dropdown items -->
-                <a class="nav-link dropdown-item" href="{% url 'upload' %}">Upload Video</a>
+                <a class="nav-link dropdown-item" href="csv-upload.html">Upload CSV</a> <!-- Dropdown items -->
+                <a class="nav-link dropdown-item" href="video-upload.html">Upload Video</a>
             </div>
         </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            <a class="nav-link" href="#">Logout</a>
           </li>
         </ul>
       </div>
@@ -535,13 +531,18 @@
           <!-- Left Column -->
           <div
             class="col-md-3 p-0 d-flex flex-column scroll-left"
-
           >
             <div class="p-4">
               <img src="https://img.icons8.com/?size=512&id=cO5OxsYSK7Lh&format=png" alt="Search Image" style="max-width: 100%; height: 20%"/>
 
               <!-- Search Bar -->
               <div class="mt-3">
+                <div class="search-filter-box mb-5" id="Search-by-time">
+                  <input type="text" id="searchByStartTimeInput" placeholder="Jump to time(00:00:00)">
+                  <br><br>
+                  <button  class="custom-btn btn-15" id="searchByStartTimeButton" style="border-top-right-radius: 21px;border-bottom-right-radius: 21px;">Search</button>
+              </div>
+
                 <div class="search-filter-box">
                   <!-- <input type="text" id="searchInput" placeholder="Search for name">
                   <button id="searchButton">Search</button>
@@ -549,22 +550,11 @@
 
                   <input type="text" id="searchInput" placeholder="Search by name" list="nameOptions">
   <datalist id="nameOptions"></datalist>
-  <button class="btn btn-danger" id="searchButton" style="border-radius: 15px;">Search</button>
+  <button id="searchButton" class="custom-btn btn-15 btn-danger" style="border-top-right-radius: 21px;border-bottom-right-radius: 21px;">Search</button>
 
                 </div>
                 <div id="searchResults">
                   <!-- Search result items will be appended here -->
-                </div>
-
-
-                <br><br>
-                <div class="search-filter-box" id="Search-by-time">
-                  <input type="text" id="searchByStartTimeInput" placeholder="Jump to time(00:00:00)">
-                  <br><br>
-                  <button  class="btn btn-danger" id="searchByStartTimeButton" style="border-radius: 15px;">Search</button>
-
-
-
                 </div>
 
 
@@ -576,14 +566,11 @@
 
               <div id="notFoundMessage" style="display: none;">No matching results found.</div>
             </div>
-
-
           </div>
 
 
         <!-- Right Column -->
-        <div class="col-md-9 p-0 mt-5">
-
+        <div class="col-md-9 p-0">
           <div class="container show-controls">
             <div class="wrapper">
               <div class="div1">
@@ -638,20 +625,19 @@
                         <button class="fullscreen" data-toggle="tooltip" title="Fullscreen">
                           <i class="fa-solid fa-expand"></i>
                         </button>
-
+                          <button class="downloadButton"  data-toggle="tooltip" title="Custom Dowload" onclick="location.href='{% url 'crop' %}'">
+                            <i class="fa-solid fa-file-export"></i>
+                          </button>
                         <button class="downloadBtn" id="downloadButton" onclick="downloadVideo()" data-toggle="tooltip" title="Dowload">
-                          <i class="fa-solid fa-download"></i>
-                        </button>
+                            <i class="fa-solid fa-download"></i>
+                          </button>
 
-                        <button class="downloadButton"  data-toggle="tooltip" title="Custom Dowload" onclick="location.href='{% url 'crop' %}'">
-                          <i class="fa-solid fa-file-export"></i>
-                        </button>
 
                       </li>
                     </ul>
                   </div>
-                  <!-- <video src="{{i}}"  type="video/mp4" id="videoPlayer" ></video> -->
-                  <video src="{{i}}" type="video/mp4" id="videoPlayer" ></video>
+                   <video src="{{i}}"  type="video/mp4" id="videoPlayer" ></video>
+
                 </div>
               </div>
             </div>
@@ -787,45 +773,9 @@
                   const video = document.getElementById("videoPlayer");
                   const a = document.createElement("a");
                   a.href = video.src;
-                  a.download = "full_video.mp4";
+                  a.download = video.src;
                   a.click();
             }
-
-
-        //    CUSTOM VIDEO DOWMLOAD
-        function timeToSeconds(timeString) {
-    const timeParts = timeString.split(":"||".");
-    if (timeParts.length === 3) {
-        const hours = parseInt(timeParts[0], 10) || 0;
-        const minutes = parseInt(timeParts[1], 10) || 0;
-        const seconds = parseInt(timeParts[2], 10) || 0;
-        return hours * 3600 + minutes * 60 + seconds;
-    }
-    return 0;
-}
-
-function downloadCustomVideo() {
-
-    const video = document.getElementById("videoPlayer");
-    // const startTimeInput = details.startTime;
-
-   // const startTime = timeToSeconds(startTimeInput);
-   const startTime=videoPlayer.currentTime;
-   if (startTime < 0) {
-        alert("Please enter a valid start time in hh:mm:ss format.");
-        return;
-    }
-
-      const a = document.createElement("a");
-
-    const videoSrc = video.src + "#t=" + startTime;
-    a.href = videoSrc;
-
-     a.download = "custom_video.mp4";
-     a.click();
-}
- //    CUSTOM VIDEO DOWMLOAD
-
 
             fullScreenBtn.addEventListener("click", () => {
               container.classList.toggle("fullscreen");
@@ -885,7 +835,6 @@ const nameOptions = document.getElementById('nameOptions');
 
 let csvData = []; // To store parsed CSV data
 
-// fetch("{% static 'files/one (2).csv' %}") // Assuming data.csv is the name of your CSV file
 fetch("{% static 'files/sheets.csv' %}")
   .then(response => response.text())
   .then(data => {
@@ -970,22 +919,20 @@ function updateSearchResults(detailsArray) {
     companyDiv.innerHTML = `Company Name: ${details.companyName}`;
 
     const startTimeDiv = document.createElement('div');
-    startTimeDiv.innerHTML = `Time: ${details.startTime}`;
-
-     // Append the information divs to the main div
-     div.appendChild(nameDiv);
-    div.appendChild(companyDiv);
-    div.appendChild(startTimeDiv);
-
-    // Append the main div to the search results container
-    searchResultsContainer.appendChild(div);
+    startTimeDiv.innerHTML = `Start Time: ${details.startTime}`;
 
     // Add click event listener to play the video segment
     div.addEventListener('click', () => {
       playVideoSegment(details.startTime, details.endTime);
     });
 
+    // Append the information divs to the main div
+    div.appendChild(nameDiv);
+    div.appendChild(companyDiv);
+    div.appendChild(startTimeDiv);
 
+    // Append the main div to the search results container
+    searchResultsContainer.appendChild(div);
   });
 }
 

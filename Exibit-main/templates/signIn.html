@@ -125,6 +125,16 @@
       .title-1 {
         font-size: 2.2rem;
         color: #444;
+        margin-bottom: 10px;
+      }
+      .title-2 {
+        font-size: 1.2rem;
+        color: #444;
+        margin-bottom: 90px;
+      }
+      .title-3 {
+        font-size: 1.2rem;
+        color: #032b55;
         margin-bottom: 90px;
       }
 
@@ -483,7 +493,8 @@
         <div class="signin-signup">
           <form action="/postsign/" method="post" class="sign-in-form">
             {% csrf_token %}
-            <h2 class="title-1">ExhibitonWatch</h2>
+            <h2 class="title-1">Exhibit On Watch</h2>
+            <h6 class="title-2">Powered by <a href="https://punchbiz.co/"><span class="title-3">Punchbiz</span></a></h6>
             <h2 class="title">LOG IN</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
@@ -519,6 +530,7 @@
           <form action="/postsignup/" method="post" class="sign-up-form">
             {% csrf_token %}
             <h2 class="title-1">ExhibitonWatch</h2>
+            <h6 class="title-2">Powered by  <a href="https://punchbiz.co/"><span class="title-3">Punchbiz</span></a></h6>
             <h2 class="title">Sign up</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
